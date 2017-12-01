@@ -19,7 +19,15 @@ class ESUtils(object):
     def test_method(self):
         print 11
 
+    def is_index_exists(self, index_name):
+        """
+        判断索引是否存在
+        :param index_name:
+        :return:
+        """
+        response = HttpUtils.request(method='GET', url=index_name)
+        code = response.status
+        print '[index] %s  exist http code is %s' % (index_name, code)
+        return int(code) != 404
 
-if __name__ == "__main__":
-    tool = ESUtils()
-    tool.test_method("aa")
+
