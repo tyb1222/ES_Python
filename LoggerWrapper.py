@@ -2,7 +2,6 @@
 
 import logging
 import os
-import types
 
 
 class LoggerWrapper(object):
@@ -23,18 +22,25 @@ class LoggerWrapper(object):
         self.logger.addHandler(handler)
         self.logger.setLevel(logging.INFO)
 
-    __slots__ = "logger"
-
-    def __get__(self, instance, owner):
-        return types.MethodType(self.logger, instance, owner)
+    @staticmethod
+    def get_logger():
+        logger = logging.getLogger()
+        dir_path = os.getcwd()
+        handler = logging.FileHandler(os.path.join(dir_path, "service.log"))
+        formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+        return logger
 
     @staticmethod
     def log(func):
-        print dir(LoggerWrapper)
 
         def inner_func(*args):
-
-            LoggerWrapper.logger(args)
+            LoggerWrapper.get_logger().info("inner_func")
             func(args)
 
         return inner_func
+
+if __name__ == "__main__":
+    LoggerWrapper.logger("aa")
