@@ -3,7 +3,6 @@ import httplib
 
 
 class HttpUtils(object):
-    ALIAS = '_aliases'
 
     @staticmethod
     def request(host,port, method_type, url, body):
