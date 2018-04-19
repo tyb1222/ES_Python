@@ -7,6 +7,13 @@ import os
 class LoggerWrapper(object):
     _singleton = {}
 
+    logger = logging.getLogger()
+    dir_path = os.getcwd()
+    handler = logging.FileHandler(os.path.join(dir_path, "service.log"))
+    formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    
     def __new__(cls, *args, **kwargs):
         if not (cls in cls._singleton):
             cls._singleton[cls] = object.__new__(cls)
@@ -24,12 +31,7 @@ class LoggerWrapper(object):
 
     @staticmethod
     def get_logger():
-        logger = logging.getLogger()
-        dir_path = os.getcwd()
-        handler = logging.FileHandler(os.path.join(dir_path, "service.log"))
-        formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
+
         logger.setLevel(logging.INFO)
         return logger
 
